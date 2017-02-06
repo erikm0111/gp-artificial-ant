@@ -10,16 +10,23 @@ public class Node {
     private Symbol symbol;
     private Node parentNode;
     private Node[] childrenNodes;
+    private int numChildren;
 
     public Node(Node parent, Symbol symbol){
         this.symbol = symbol;
-        this.childrenNodes = new Node[symbol.numArgs()];
+        this.numChildren = symbol.numArgs();
+        this.childrenNodes = new Node[numChildren];
+        this.parentNode = parent;
         if (parent == null){
             this.level = 0;
         }
         else{
             this.level = parent.getLevel() + 1;
         }
+    }
+
+    public int getNumChildren(){
+        return numChildren;
     }
 
     public Symbol getSymbol(){
@@ -39,9 +46,10 @@ public class Node {
     }
 
     public void addChildNode(Node node){
-        for (int i = 0; i < childrenNodes.length; i++) {
+        for (int i = 0; i < numChildren; i++) {
             if (childrenNodes[i] == null){
                 childrenNodes[i] = node;
+                break;
             }
         }
     }
