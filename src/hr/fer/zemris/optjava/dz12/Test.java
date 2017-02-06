@@ -35,7 +35,7 @@ public class Test {
 //        System.out.println("Level of children: " + root.getChildrenNodes()[0].getLevel());
 
         TreeBuilder tb = new TreeBuilder();
-        Node root = tb.createRandomTree(2);
+        Node root = tb.createRandomTree(3);
         System.out.println();
     }
 

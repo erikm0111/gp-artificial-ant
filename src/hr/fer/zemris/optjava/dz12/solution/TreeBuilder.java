@@ -39,19 +39,23 @@ public class TreeBuilder {
         }
 
         while (true) {
-            Node current = queue.poll();
-            if (current.getLevel() == maxDepth){
+            if (queue.isEmpty()){
                 break;
             }
-            int numChildren = current.getNumChildren();
-            for (int i = 0; i < numChildren; i++) {
-                Node childNode = new Node(current, randomSymbol());
-                current.addChildNode(childNode);
-                queue.add(childNode);
-            }
-            Node[] childrenNodes = current.getChildrenNodes();
-            for (int i = 0; i < childrenNodes.length; i++) {
-                queue.add(childrenNodes[i]);
+            Node current = queue.poll();
+            if (current.getLevel() < maxDepth - 2){
+                int numChildren = current.getNumChildren();
+                for (int i = 0; i < numChildren; i++) {
+                    Node childNode = new Node(current, randomSymbol());
+                    current.addChildNode(childNode);
+                    queue.add(childNode);
+                }
+            }else if (current.getLevel() == maxDepth - 2){
+                int numChildren = current.getNumChildren();
+                for (int i = 0; i < numChildren; i++) {
+                    Node childNode = new Node(current, randomTerminalSymbol());
+                    current.addChildNode(childNode);
+                }
             }
         }
         return root;
