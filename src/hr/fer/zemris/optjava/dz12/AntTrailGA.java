@@ -1,5 +1,6 @@
 package hr.fer.zemris.optjava.dz12;
 
+import hr.fer.zemris.optjava.dz12.ga.GeneticAlgorithm;
 import hr.fer.zemris.optjava.dz12.gui.ArtificialAntFrame;
 import hr.fer.zemris.optjava.dz12.solution.*;
 import sun.reflect.generics.tree.Tree;
@@ -39,6 +40,9 @@ public class AntTrailGA {
         map = new int[width][height];
         parseMap(map, lines, width, height);
 
+
+        GeneticAlgorithm ga = new GeneticAlgorithm();
+        Node best = ga.optimize();
 
         int[][] finalMap = map;
         ArtificialAnt ant = new ArtificialAnt(0, 0, Direction.EAST);

@@ -8,21 +8,19 @@ import hr.fer.zemris.optjava.dz12.lang.terminal.MoveAction;
 import hr.fer.zemris.optjava.dz12.lang.terminal.TurnLeftAction;
 import hr.fer.zemris.optjava.dz12.lang.terminal.TurnRightAction;
 
-import javax.swing.plaf.synth.SynthOptionPaneUI;
-import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.Queue;
 
 /**
  * Created by ematosevic on 07.02.17..
  */
-public class Executor {
+public class TreeExecutor {
     private Queue<String> actionsToExecute = new LinkedList<>();    // TODO
     private ArtificialAnt ant;
     private int[][] map;
     private int width, height;
 
-    public Executor(ArtificialAnt ant, int[][] map, int width, int height){
+    public TreeExecutor(ArtificialAnt ant, int[][] map, int width, int height){
         this.ant = ant;
         this.map = map;
         this.width = width;
@@ -178,6 +176,11 @@ public class Executor {
                 }
                 break;
         }
+        int val = map[ant.getX()][ant.getY()];
+        if (val == 1){
+            ant.incrementScore();
+        }
+        map[ant.getX()][ant.getY()] = -1;
     }
 
     private boolean checkIfFoodAhead(ArtificialAnt ant, int[][] map) {

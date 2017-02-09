@@ -5,12 +5,14 @@ package hr.fer.zemris.optjava.dz12.solution;
  */
 public class ArtificialAnt {
     private int x,y;
+    private int score;
     private Direction direction;
 
     public ArtificialAnt(int x, int y, Direction direction){
         this.x = x;
         this.y = y;
         this.direction = direction;
+        this.score = 0;
     }
 
     public ArtificialAnt(ArtificialAnt ant) {
@@ -46,5 +48,13 @@ public class ArtificialAnt {
     @Override
     public String toString(){
         return "[" + x + ", " + y + "], " + direction;
+    }
+
+    public void incrementScore(){
+        score++;
+    }
+
+    public int getScore() {
+        return score;
     }
 }

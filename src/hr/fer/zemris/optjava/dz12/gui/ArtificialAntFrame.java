@@ -1,9 +1,9 @@
 package hr.fer.zemris.optjava.dz12.gui;
 
 import hr.fer.zemris.optjava.dz12.solution.ArtificialAnt;
-import hr.fer.zemris.optjava.dz12.solution.Executor;
 import hr.fer.zemris.optjava.dz12.solution.Node;
 import hr.fer.zemris.optjava.dz12.solution.TreeBuilder;
+import hr.fer.zemris.optjava.dz12.solution.TreeExecutor;
 
 import javax.swing.*;
 import java.awt.*;
@@ -35,12 +35,18 @@ public class ArtificialAntFrame extends JFrame{
         MapPanel panel = new MapPanel(ant, finalMap, width, height);
         add(panel, BorderLayout.CENTER);
 
+        JPanel southPanel = new JPanel();
+        add(southPanel, BorderLayout.SOUTH);
+
         JButton btnNextStep = new JButton("Next step");
-        add(btnNextStep, BorderLayout.SOUTH);
+        southPanel.add(btnNextStep, BorderLayout.WEST);
+
+        JLabel lblScore = new JLabel("Score: ");
+        southPanel.add(lblScore, BorderLayout.EAST);
 
         TreeBuilder tb = new TreeBuilder();
         Node root = tb.createRandomTree(10);
-        Executor ex = new Executor(ant, finalMap, width, height);
+        TreeExecutor ex = new TreeExecutor(ant, finalMap, width, height);
         ex.executeTree(root);
 
         btnNextStep.addActionListener(new ActionListener() {
@@ -51,6 +57,7 @@ public class ArtificialAntFrame extends JFrame{
                     ex.executeTree(root);
                     ex.nextAction();
                 }
+                lblScore.setText("Score: " + ant.getScore());
                 panel.repaint();
             }
         });
