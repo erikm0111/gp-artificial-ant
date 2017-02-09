@@ -40,8 +40,7 @@ public class AntTrailGA {
         map = new int[width][height];
         parseMap(map, lines, width, height);
 
-
-        GeneticAlgorithm ga = new GeneticAlgorithm();
+        GeneticAlgorithm ga = new GeneticAlgorithm(maxGen, populationSize, minFitness);
         Node best = ga.optimize();
 
         int[][] finalMap = map;

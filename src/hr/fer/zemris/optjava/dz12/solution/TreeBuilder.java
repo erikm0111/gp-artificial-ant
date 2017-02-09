@@ -28,7 +28,12 @@ public class TreeBuilder {
         this.rand = new Random();
     }
 
-    public Node createRandomTree(int maxDepth){
+    /**
+     * Method that creates tree with inner nodes consisting of terminal and non-terminal symbols.
+     * @param maxDepth maximum depth of tree
+     * @return root node of tree
+     */
+    public Node growTree(int maxDepth){
         Queue<Node> queue = new LinkedList<>();
         Node root = new Node(null, randomNonTerminalSymbol());
         queue.add(root);
@@ -47,6 +52,44 @@ public class TreeBuilder {
                 int numChildren = current.getNumChildren();
                 for (int i = 0; i < numChildren; i++) {
                     Node childNode = new Node(current, randomSymbol());
+                    current.addChildNode(childNode);
+                    queue.add(childNode);
+                }
+            }else if (current.getLevel() == maxDepth - 2){
+                int numChildren = current.getNumChildren();
+                for (int i = 0; i < numChildren; i++) {
+                    Node childNode = new Node(current, randomTerminalSymbol());
+                    current.addChildNode(childNode);
+                }
+            }
+        }
+        return root;
+    }
+
+    /**
+     * Method that creates tree with inner nodes consisting only of non-terminal symbols.
+     * @param maxDepth maximum depth of tree
+     * @return root node of tree
+     */
+    public Node fullTree(int maxDepth){
+        Queue<Node> queue = new LinkedList<>();
+        Node root = new Node(null, randomNonTerminalSymbol());
+        queue.add(root);
+        for (int i = 0; i < root.getNumChildren(); i++) {
+            Node childNode = new Node(root, randomNonTerminalSymbol());
+            root.addChildNode(childNode);
+            queue.add(childNode);
+        }
+
+        while (true) {
+            if (queue.isEmpty()){
+                break;
+            }
+            Node current = queue.poll();
+            if (current.getLevel() < maxDepth - 2){
+                int numChildren = current.getNumChildren();
+                for (int i = 0; i < numChildren; i++) {
+                    Node childNode = new Node(current, randomNonTerminalSymbol());
                     current.addChildNode(childNode);
                     queue.add(childNode);
                 }

@@ -27,7 +27,9 @@ public class Test {
 //        System.out.println("Level of children: " + root.getChildrenNodes()[0].getLevel());
 
         TreeBuilder tb = new TreeBuilder();
-        Node root = tb.createRandomTree(3);
+        Node grow = tb.growTree(6);
+        Node full = tb.fullTree(6);
+        System.out.println();
         System.out.println();
 
     }

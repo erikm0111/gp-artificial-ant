@@ -45,7 +45,7 @@ public class ArtificialAntFrame extends JFrame{
         southPanel.add(lblScore, BorderLayout.EAST);
 
         TreeBuilder tb = new TreeBuilder();
-        Node root = tb.createRandomTree(10);
+        Node root = tb.growTree(10);
         TreeExecutor ex = new TreeExecutor(ant, finalMap, width, height);
         ex.executeTree(root);
 
