@@ -1,5 +1,8 @@
 package hr.fer.zemris.optjava.dz12;
 
+import hr.fer.zemris.optjava.dz12.gui.ArtificialAntFrame;
+
+import javax.swing.*;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -33,12 +36,16 @@ public class AntTrailGA {
 
         map = new int[width][height];
         parseMap(map, lines, width, height);
-        for (int i = 0; i < width; i++) {
-            for (int j = 0; j < height; j++) {
-                System.out.print(map[i][j] + " ");
+
+
+        int[][] finalMap = map;
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                ArtificialAntFrame frame = new ArtificialAntFrame(finalMap, width, height);
             }
-            System.out.println();
-        }
+        });
+
     }
 
     /**
