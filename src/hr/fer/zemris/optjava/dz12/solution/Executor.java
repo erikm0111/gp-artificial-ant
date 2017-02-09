@@ -10,11 +10,14 @@ import hr.fer.zemris.optjava.dz12.lang.terminal.TurnRightAction;
 
 import javax.swing.plaf.synth.SynthOptionPaneUI;
 import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.Queue;
 
 /**
  * Created by ematosevic on 07.02.17..
  */
 public class Executor {
+    private Queue<String> actionsToExecute = new LinkedList<>();    // TODO
     private ArtificialAnt ant;
     private int[][] map;
     private int width, height;
@@ -27,9 +30,18 @@ public class Executor {
     }
 
     public void executeTree(Node root){
+        // copy objects
+        ArtificialAnt antCopy = new ArtificialAnt(ant);
+        int[][] mapCopy = new int[width][height];
+        for (int i = 0; i < width; i++) {
+            for (int j = 0; j < height; j++) {
+                mapCopy[i][j] = map[i][j];
+            }
+        }
+
         Symbol current = root.getSymbol();
         if (current instanceof IfFoodAheadFunction){
-            boolean foodAhead = checkIfFoodAhead(ant, map);
+            boolean foodAhead = checkIfFoodAhead(antCopy, mapCopy);
             if (foodAhead){
                 Node left = root.getChildrenNodes()[0];
                 executeTree(left);
@@ -54,16 +66,40 @@ public class Executor {
             executeTree(third);
         }
         else if (current instanceof MoveAction){
-            move(ant, map);
+            move(antCopy, mapCopy);
+            actionsToExecute.add("MOV");
             System.out.println("MOV");
         }
         else if (current instanceof TurnLeftAction){
-            turnLeft(ant, map);
+            turnLeft(antCopy, mapCopy);
+            actionsToExecute.add("LEF");
             System.out.println("LEF");
         }
         else if (current instanceof TurnRightAction){
-            turnRight(ant, map);
+            turnRight(antCopy, mapCopy);
+            actionsToExecute.add("RIG");
             System.out.println("RIG");
+        }
+    }
+
+    public boolean nextAction(){
+        if (!actionsToExecute.isEmpty()) {
+            String action = actionsToExecute.poll();
+            switch (action) {
+                case "MOV":
+                    move(ant, map);
+                    break;
+                case "LEF":
+                    turnLeft(ant, map);
+                    break;
+                case "RIG":
+                    turnRight(ant, map);
+                    break;
+            }
+            return true;
+        }
+        else {
+            return false;
         }
     }
 

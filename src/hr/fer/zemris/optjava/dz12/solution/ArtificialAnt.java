@@ -13,6 +13,12 @@ public class ArtificialAnt {
         this.direction = direction;
     }
 
+    public ArtificialAnt(ArtificialAnt ant) {
+        this.x = ant.getX();
+        this.y = ant.getY();
+        this.direction = ant.getDirection();
+    }
+
     public int getX() {
         return x;
     }
@@ -35,5 +41,10 @@ public class ArtificialAnt {
 
     public void setDirection(Direction direction) {
         this.direction = direction;
+    }
+
+    @Override
+    public String toString(){
+        return "[" + x + ", " + y + "], " + direction;
     }
 }

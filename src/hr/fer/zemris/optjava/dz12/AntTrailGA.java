@@ -1,6 +1,8 @@
 package hr.fer.zemris.optjava.dz12;
 
 import hr.fer.zemris.optjava.dz12.gui.ArtificialAntFrame;
+import hr.fer.zemris.optjava.dz12.solution.*;
+import sun.reflect.generics.tree.Tree;
 
 import javax.swing.*;
 import java.io.*;
@@ -39,13 +41,18 @@ public class AntTrailGA {
 
 
         int[][] finalMap = map;
+        ArtificialAnt ant = new ArtificialAnt(0, 0, Direction.EAST);
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
-                ArtificialAntFrame frame = new ArtificialAntFrame(finalMap, width, height);
+                ArtificialAntFrame frame = new ArtificialAntFrame(ant, finalMap, width, height);
             }
         });
-
+//        TreeBuilder tb = new TreeBuilder();
+//        Node root = tb.createRandomTree(3);
+//        ArtificialAnt ant = new ArtificialAnt(0,0, Direction.EAST);
+//        Executor ex = new Executor(ant, map, width, height);
+//        ex.executeTree(root);
     }
 
     /**

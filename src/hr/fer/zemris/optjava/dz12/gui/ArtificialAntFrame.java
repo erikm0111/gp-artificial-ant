@@ -1,12 +1,20 @@
 package hr.fer.zemris.optjava.dz12.gui;
 
+import hr.fer.zemris.optjava.dz12.solution.ArtificialAnt;
+import hr.fer.zemris.optjava.dz12.solution.Executor;
+import hr.fer.zemris.optjava.dz12.solution.Node;
+import hr.fer.zemris.optjava.dz12.solution.TreeBuilder;
+
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 /**
  * Created by ematosevic on 07.02.17..
  */
 public class ArtificialAntFrame extends JFrame{
+    private ArtificialAnt ant;
 //    public static void main(String[] args){
 //        SwingUtilities.invokeLater(new Runnable() {
 //            @Override
@@ -16,36 +24,36 @@ public class ArtificialAntFrame extends JFrame{
 //        });
 //    }
 
-    public ArtificialAntFrame(int[][] finalMap, int width, int height){
+    public ArtificialAntFrame(ArtificialAnt ant, int[][] finalMap, int width, int height){
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setVisible(true);
-        setSize(900, 900);
+        setSize(600, 650);
         setLocation(300, 100);
+        //sthis.ant = ant;
 
+        setLayout(new BorderLayout());
+        MapPanel panel = new MapPanel(ant, finalMap, width, height);
+        add(panel, BorderLayout.CENTER);
 
-        JPanel panel = new JPanel(new GridLayout(width, height));
-        add(panel);
+        JButton btnNextStep = new JButton("Next step");
+        add(btnNextStep, BorderLayout.SOUTH);
 
+        TreeBuilder tb = new TreeBuilder();
+        Node root = tb.createRandomTree(10);
+        Executor ex = new Executor(ant, finalMap, width, height);
+        ex.executeTree(root);
 
-        JLabel[][] lbls = new JLabel[width][height];
-        for (int i = 0; i < width; i++) {
-            for (int j = 0; j < height; j++) {
-                String val = "";
-                switch (finalMap[i][j]){
-                    case -1:
-                        val = "";
-                        break;
-                    case 0:
-                        val = ".";
-                        break;
-                    case 1:
-                        val = "#";
-                        break;
+        btnNextStep.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                boolean notDone = ex.nextAction();
+                if (!notDone){
+                    ex.executeTree(root);
+                    ex.nextAction();
                 }
-                lbls[i][j] = new JLabel(val);
-                lbls[i][j].setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY));
-                panel.add(lbls[i][j]);
+                panel.repaint();
             }
-        }
+        });
+
     }
 }
