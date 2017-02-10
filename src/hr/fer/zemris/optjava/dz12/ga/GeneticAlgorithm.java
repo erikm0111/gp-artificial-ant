@@ -32,12 +32,7 @@ public class GeneticAlgorithm {
         this.ant = ant;
         this.width = width;
         this.height = height;
-        this.map = new int[width][height];
-        for (int i = 0; i < width; i++) {
-            for (int j = 0; j < height; j++) {
-                this.map[i][j] = map[i][j];
-            }
-        }
+        this.map = map;
     }
 
 

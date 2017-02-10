@@ -17,26 +17,22 @@ import java.util.Queue;
 public class TreeExecutor {
     private static final int MAX_ACTIONS = 600;
     private Queue<String> actionsToExecute = new LinkedList<>();    // TODO
-    //private ArtificialAnt ant;
-    //private int[][] map;
     private int width, height;
-    //private ArtificialAnt antCopyForExecution;
-    //private int[][] mapCopyForExecution;
 
     public TreeExecutor(int width, int height){
         this.width = width;
         this.height = height;
-
-        // copy objects
-        //antCopy = new ArtificialAnt(ant);
     }
 
     public int evaluate(Node root, int[][] map, ArtificialAnt ant){
+        actionsToExecute = new LinkedList<>();
         int numActions = 0;
         while (numActions < MAX_ACTIONS) {
-            if (actionsToExecute.isEmpty()) {
-                executeTree(root, map, ant);
+            if (isThereMoreActions()) {
+                nextAction(ant, map);
+                numActions++;
             } else {
+                executeTree(root, map, ant);
                 nextAction(ant, map);
                 numActions++;
             }
@@ -96,8 +92,12 @@ public class TreeExecutor {
         }
     }
 
-    public boolean nextAction(ArtificialAnt ant, int[][] map){
-        if (!actionsToExecute.isEmpty()) {
+    public boolean isThereMoreActions(){
+        return !actionsToExecute.isEmpty();
+    }
+
+    public void nextAction(ArtificialAnt ant, int[][] map){
+        if (isThereMoreActions()) {
             String action = actionsToExecute.poll();
             switch (action) {
                 case "MOV":
@@ -110,10 +110,6 @@ public class TreeExecutor {
                     turnRight(ant);
                     break;
             }
-            return true;
-        }
-        else {
-            return false;
         }
     }
 

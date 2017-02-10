@@ -18,6 +18,7 @@ public class ArtificialAntFrame extends JFrame{
     private boolean stop = false;
 
     public ArtificialAntFrame(Node best, ArtificialAnt ant, int[][] finalMap, int width, int height){
+        setTitle("Artificial Ant by Erik");
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setVisible(true);
         setSize(600, 650);
@@ -40,19 +41,21 @@ public class ArtificialAntFrame extends JFrame{
         southPanel.add(lblScore, BorderLayout.EAST);
 
         TreeExecutor ex = new TreeExecutor(width, height);
-        ex.executeTree(best, finalMap, ant);
+        //ex.executeTree(best, finalMap, ant);
         final int[] numActions = {0};
 
-        Timer timer = new Timer(100, new ActionListener() {
+        Timer timer = new Timer(50, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                boolean notDone = ex.nextAction(ant, finalMap);
-                if (!notDone){
+                if (ex.isThereMoreActions()){
+                    ex.nextAction(ant, finalMap);
+                    numActions[0]++;
+                }
+                else{
                     ex.executeTree(best, finalMap, ant);
                     ex.nextAction(ant, finalMap);
-
+                    numActions[0]++;
                 }
-                numActions[0]++;
                 lblScore.setText("Actions: "+ numActions[0] +" - Score: " + ant.getScore());
                 panel.repaint();
             }
@@ -76,12 +79,15 @@ public class ArtificialAntFrame extends JFrame{
         btnNextStep.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                boolean notDone = ex.nextAction(ant, finalMap);
-                if (!notDone){
+                if (ex.isThereMoreActions()){
+                    ex.nextAction(ant, finalMap);
+                    numActions[0]++;
+                }
+                else{
                     ex.executeTree(best, finalMap, ant);
                     ex.nextAction(ant, finalMap);
+                    numActions[0]++;
                 }
-                numActions[0]++;
                 lblScore.setText("Actions: "+ numActions[0] +" - Score: " + ant.getScore());
                 panel.repaint();
             }

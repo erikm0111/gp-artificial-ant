@@ -83,7 +83,7 @@ public class AntTrailGA {
                         map[i][j] = -1;
                         break;
                     case "0":
-                        map[i][j] = 0;
+                        map[i][j] = -1;
                         break;
                     case "1":
                         map[i][j] = 1;
