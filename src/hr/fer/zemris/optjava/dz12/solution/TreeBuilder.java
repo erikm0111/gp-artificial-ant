@@ -38,7 +38,7 @@ public class TreeBuilder {
         Node root = new Node(null, randomNonTerminalSymbol());
         queue.add(root);
         for (int i = 0; i < root.getNumChildren(); i++) {
-            Node childNode = new Node(root, randomSymbol());
+            Node childNode = new Node(root, (maxDepth - 2 == 0) ? randomTerminalSymbol() : randomSymbol());
             root.addChildNode(childNode);
             queue.add(childNode);
         }
@@ -76,7 +76,7 @@ public class TreeBuilder {
         Node root = new Node(null, randomNonTerminalSymbol());
         queue.add(root);
         for (int i = 0; i < root.getNumChildren(); i++) {
-            Node childNode = new Node(root, randomNonTerminalSymbol());
+            Node childNode = new Node(root, (maxDepth - 2 == 0) ? randomTerminalSymbol() : randomNonTerminalSymbol());
             root.addChildNode(childNode);
             queue.add(childNode);
         }

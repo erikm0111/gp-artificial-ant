@@ -14,6 +14,8 @@ import java.util.List;
  * Created by ematosevic on 05.02.17..
  */
 public class AntTrailGA {
+    public static final int MAX_DEPTH = 6;
+
     public static void main(String[] args) throws Exception {
         List<String> lines = new ArrayList<>();
         int[][] map = null;
@@ -40,7 +42,7 @@ public class AntTrailGA {
         map = new int[width][height];
         parseMap(map, lines, width, height);
 
-        GeneticAlgorithm ga = new GeneticAlgorithm(maxGen, populationSize, minFitness);
+        GeneticAlgorithm ga = new GeneticAlgorithm(maxGen, populationSize, minFitness, MAX_DEPTH);
         Node best = ga.optimize();
 
         int[][] finalMap = map;
