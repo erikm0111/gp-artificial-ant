@@ -32,7 +32,7 @@ public class AntTrailGA {
 //        String pathSolution = args[4];
         String pathMap = "santa-fe-trail.txt";
         int maxGen = 100;
-        int populationSize = 500;
+        int populationSize = 1000;
         double minFitness = 70;
 
         File file = new File(pathMap);
@@ -69,11 +69,6 @@ public class AntTrailGA {
                 ArtificialAntFrame frame = new ArtificialAntFrame(best, ant, finalMap, width, height);
             }
         });
-//        TreeBuilder tb = new TreeBuilder();
-//        Node root = tb.createRandomTree(3);
-//        ArtificialAnt ant = new ArtificialAnt(0,0, Direction.EAST);
-//        Executor ex = new Executor(ant, map, width, height);
-//        ex.executeTree(root);
     }
 
     /**
