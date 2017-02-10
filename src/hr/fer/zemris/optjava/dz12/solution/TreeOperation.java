@@ -17,15 +17,49 @@ import java.util.Random;
 /**
  * Created by ematosevic on 06.02.17..
  */
-public class TreeBuilder {
+public class TreeOperation {
     private NonTerminalSymbol[] nonterminals = new NonTerminalSymbol[]{new IfFoodAheadFunction(), new Prog2Function(), new Prog3Function()};
     private TerminalSymbol[] terminals = new TerminalSymbol[]{new MoveAction(), new TurnLeftAction(), new TurnRightAction()};
     private Symbol[] allSymbols = new Symbol[]{new IfFoodAheadFunction(), new Prog2Function(), new Prog3Function(),
             new MoveAction(), new TurnLeftAction(), new TurnRightAction()};
     private Random rand;
 
-    public TreeBuilder(){
+    public TreeOperation(){
         this.rand = new Random();
+    }
+
+    public int countNodesInTree(Node root){
+        Node[] children = root.getChildrenNodes();
+        int c = 1;
+        for (int i = 0; i < children.length; i++) {
+            if (children[i] != null) c += countNodesInTree(children[i]);
+        }
+        return c;
+    }
+
+    public Node pickRandomNode(Node root){
+        int numNodes = countNodesInTree(root);
+        int nodeId = rand.nextInt(numNodes);
+        Node node = getNode(root, nodeId);
+        return node;
+    }
+
+    private Node getNode(Node root, int nodeId) {
+        int i = 0;
+        Queue<Node> queue = new LinkedList<>();
+        queue.add(root);
+        while (!queue.isEmpty()){
+            Node node = queue.poll();
+            ++i;
+            if(i == nodeId){
+                return node;
+            }
+            Node[] children = node.getChildrenNodes();
+            for (int j = 0; j < children.length; j++) {
+                queue.add(children[j]);
+            }
+        }
+        return null;
     }
 
     /**

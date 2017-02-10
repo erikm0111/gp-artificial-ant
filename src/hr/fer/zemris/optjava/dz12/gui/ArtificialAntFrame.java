@@ -2,7 +2,6 @@ package hr.fer.zemris.optjava.dz12.gui;
 
 import hr.fer.zemris.optjava.dz12.solution.ArtificialAnt;
 import hr.fer.zemris.optjava.dz12.solution.Node;
-import hr.fer.zemris.optjava.dz12.solution.TreeBuilder;
 import hr.fer.zemris.optjava.dz12.solution.TreeExecutor;
 
 import javax.swing.*;

@@ -1,5 +1,6 @@
 package hr.fer.zemris.optjava.dz12.ga;
 
+import hr.fer.zemris.optjava.dz12.ga.mutation.IMutation;
 import hr.fer.zemris.optjava.dz12.ga.selection.ISelection;
 import hr.fer.zemris.optjava.dz12.solution.*;
 import sun.reflect.generics.tree.Tree;
@@ -28,9 +29,10 @@ public class GeneticAlgorithm {
     private int height;
     private Random rand;
     private ISelection selection;
+    private IMutation mutation;
 
     public GeneticAlgorithm(int[][] map , int width, int height, ArtificialAnt ant, TreeExecutor executor, int maxGen
-            , int populationSize, double minFitness, int maxDepth, ISelection selection){
+            , int populationSize, double minFitness, int maxDepth, ISelection selection, IMutation mutation){
         this.populationSize = populationSize;
         this.maxGen = maxGen;
         this.minFitness = minFitness;
@@ -43,6 +45,7 @@ public class GeneticAlgorithm {
         this.map = map;
         this.rand = new Random();
         this.selection = selection;
+        this.mutation = mutation;
     }
 
 
@@ -70,11 +73,13 @@ public class GeneticAlgorithm {
             }
             else if (p <= REPRODUCTION_PROB + MUTATION_PROB){
                 // mutation
-
+                GANodeSolution selected = selection.selectParent(population);       // TODO make a copy of parent
+                mutation.mutate(selected);
+                nextGeneration.add(selected);
             }
             else{
                 // crossover
-                
+
             }
         }
 
@@ -85,7 +90,7 @@ public class GeneticAlgorithm {
     }
 
     public void createRampedHalfAndHalfInitialPopulation(List<GANodeSolution> population, int maxDepth){
-        TreeBuilder tb = new TreeBuilder();
+        TreeOperation tb = new TreeOperation();
         int numOfOneTypePerDepth = (populationSize / (maxDepth - 1)) / 2;
         for (int i = 2; i <= maxDepth; i++) {
             for (int j = 0; j < numOfOneTypePerDepth; j++) {

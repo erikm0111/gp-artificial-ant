@@ -3,4 +3,4 @@
 - testirati da li metoda za prebrojavanje djece radi i na ne-root nodeovima
 - kazna plagiranja
 - maknut razliku izmedu 0 i -1 na mapi
-
+- k turnirsku selekciju trenutno radim tako da uzmem najboljeg od 7, a trebalo bi po vjerojatnostima

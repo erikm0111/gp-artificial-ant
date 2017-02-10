@@ -3,7 +3,7 @@ import hr.fer.zemris.optjava.dz12.lang.Symbol;
 import hr.fer.zemris.optjava.dz12.lang.nonterminal.IfFoodAheadFunction;
 import hr.fer.zemris.optjava.dz12.lang.nonterminal.Prog2Function;
 import hr.fer.zemris.optjava.dz12.solution.Node;
-import hr.fer.zemris.optjava.dz12.solution.TreeBuilder;
+import hr.fer.zemris.optjava.dz12.solution.TreeOperation;
 
 /**
  * Created by ematosevic on 06.02.17..
@@ -26,9 +26,9 @@ public class Test {
 //
 //        System.out.println("Level of children: " + root.getChildrenNodes()[0].getLevel());
 
-        TreeBuilder tb = new TreeBuilder();
-        Node grow = tb.growTree(6);
-        Node full = tb.fullTree(6);
+        TreeOperation tb = new TreeOperation();
+        Node full = tb.fullTree(3);
+        Node randomNode = tb.pickRandomNode(full);
         System.out.println();
         System.out.println();
 

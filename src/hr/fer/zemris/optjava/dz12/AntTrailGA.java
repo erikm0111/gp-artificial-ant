@@ -1,6 +1,8 @@
 package hr.fer.zemris.optjava.dz12;
 
 import hr.fer.zemris.optjava.dz12.ga.GeneticAlgorithm;
+import hr.fer.zemris.optjava.dz12.ga.selection.ISelection;
+import hr.fer.zemris.optjava.dz12.ga.selection.KTournamentSelection;
 import hr.fer.zemris.optjava.dz12.gui.ArtificialAntFrame;
 import hr.fer.zemris.optjava.dz12.solution.*;
 import sun.reflect.generics.tree.Tree;
@@ -49,7 +51,8 @@ public class AntTrailGA {
         ArtificialAnt ant = new ArtificialAnt(0, 0, Direction.EAST);
 
         TreeExecutor executor = new TreeExecutor(width, height);
-        GeneticAlgorithm ga = new GeneticAlgorithm(map, width, height, ant, executor, maxGen, populationSize, minFitness, MAX_DEPTH);
+        ISelection selection = new KTournamentSelection(7);
+        GeneticAlgorithm ga = new GeneticAlgorithm(map, width, height, ant, executor, maxGen, populationSize, minFitness, MAX_DEPTH, selection);
         Node best = ga.optimize();
 
 
