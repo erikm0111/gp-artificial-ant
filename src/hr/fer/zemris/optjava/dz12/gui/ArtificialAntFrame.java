@@ -15,21 +15,13 @@ import java.awt.event.ActionListener;
  */
 public class ArtificialAntFrame extends JFrame{
     private ArtificialAnt ant;
-//    public static void main(String[] args){
-//        SwingUtilities.invokeLater(new Runnable() {
-//            @Override
-//            public void run() {
-//                ArtificialAntFrame frame = new ArtificialAntFrame();
-//            }
-//        });
-//    }
+    private boolean stop = false;
 
-    public ArtificialAntFrame(ArtificialAnt ant, int[][] finalMap, int width, int height){
+    public ArtificialAntFrame(Node best, ArtificialAnt ant, int[][] finalMap, int width, int height){
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setVisible(true);
         setSize(600, 650);
         setLocation(300, 100);
-        //sthis.ant = ant;
 
         setLayout(new BorderLayout());
         MapPanel panel = new MapPanel(ant, finalMap, width, height);
@@ -38,26 +30,59 @@ public class ArtificialAntFrame extends JFrame{
         JPanel southPanel = new JPanel();
         add(southPanel, BorderLayout.SOUTH);
 
-        JButton btnNextStep = new JButton("Next step");
-        southPanel.add(btnNextStep, BorderLayout.WEST);
+        JButton btnStartStop = new JButton("Start");
+        southPanel.add(btnStartStop, BorderLayout.WEST);
 
-        JLabel lblScore = new JLabel("Score: ");
+        JButton btnNextStep = new JButton("Next step");
+        southPanel.add(btnNextStep, BorderLayout.CENTER);
+
+        JLabel lblScore = new JLabel("Actions: 0 - Score: 0");
         southPanel.add(lblScore, BorderLayout.EAST);
 
-        TreeBuilder tb = new TreeBuilder();
-        Node root = tb.growTree(10);
-        TreeExecutor ex = new TreeExecutor(ant, finalMap, width, height);
-        ex.executeTree(root);
+        TreeExecutor ex = new TreeExecutor(width, height);
+        ex.executeTree(best, finalMap, ant);
+        final int[] numActions = {0};
 
+        Timer timer = new Timer(100, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                boolean notDone = ex.nextAction(ant, finalMap);
+                if (!notDone){
+                    ex.executeTree(best, finalMap, ant);
+                    ex.nextAction(ant, finalMap);
+
+                }
+                numActions[0]++;
+                lblScore.setText("Actions: "+ numActions[0] +" - Score: " + ant.getScore());
+                panel.repaint();
+            }
+        });
+
+        btnStartStop.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                if (!stop) {
+                    timer.start();
+                    btnStartStop.setText("Stop");
+                    stop = true;
+                }
+                else{
+                    timer.stop();
+                    btnStartStop.setText("Start");
+                    stop = false;
+                }
+            }
+        });
         btnNextStep.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                boolean notDone = ex.nextAction();
+                boolean notDone = ex.nextAction(ant, finalMap);
                 if (!notDone){
-                    ex.executeTree(root);
-                    ex.nextAction();
+                    ex.executeTree(best, finalMap, ant);
+                    ex.nextAction(ant, finalMap);
                 }
-                lblScore.setText("Score: " + ant.getScore());
+                numActions[0]++;
+                lblScore.setText("Actions: "+ numActions[0] +" - Score: " + ant.getScore());
                 panel.repaint();
             }
         });

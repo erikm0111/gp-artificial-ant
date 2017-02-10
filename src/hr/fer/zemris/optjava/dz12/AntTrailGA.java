@@ -41,16 +41,18 @@ public class AntTrailGA {
 
         map = new int[width][height];
         parseMap(map, lines, width, height);
-
-        GeneticAlgorithm ga = new GeneticAlgorithm(maxGen, populationSize, minFitness, MAX_DEPTH);
-        Node best = ga.optimize();
-
         int[][] finalMap = map;
         ArtificialAnt ant = new ArtificialAnt(0, 0, Direction.EAST);
+
+        TreeExecutor executor = new TreeExecutor(width, height);
+        GeneticAlgorithm ga = new GeneticAlgorithm(map, width, height, ant, executor, maxGen, populationSize, minFitness, MAX_DEPTH);
+        Node best = ga.optimize();
+
+
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
-                ArtificialAntFrame frame = new ArtificialAntFrame(ant, finalMap, width, height);
+                ArtificialAntFrame frame = new ArtificialAntFrame(best, ant, finalMap, width, height);
             }
         });
 //        TreeBuilder tb = new TreeBuilder();

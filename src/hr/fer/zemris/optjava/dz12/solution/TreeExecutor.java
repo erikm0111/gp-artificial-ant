@@ -15,72 +15,88 @@ import java.util.Queue;
  * Created by ematosevic on 07.02.17..
  */
 public class TreeExecutor {
+    private static final int MAX_ACTIONS = 600;
     private Queue<String> actionsToExecute = new LinkedList<>();    // TODO
-    private ArtificialAnt ant;
-    private int[][] map;
+    //private ArtificialAnt ant;
+    //private int[][] map;
     private int width, height;
+    //private ArtificialAnt antCopyForExecution;
+    //private int[][] mapCopyForExecution;
 
-    public TreeExecutor(ArtificialAnt ant, int[][] map, int width, int height){
-        this.ant = ant;
-        this.map = map;
+    public TreeExecutor(int width, int height){
         this.width = width;
         this.height = height;
+
+        // copy objects
+        //antCopy = new ArtificialAnt(ant);
     }
 
-    public void executeTree(Node root){
-        // copy objects
-        ArtificialAnt antCopy = new ArtificialAnt(ant);
-        int[][] mapCopy = new int[width][height];
+    public int evaluate(Node root, int[][] map, ArtificialAnt ant){
+        int numActions = 0;
+        while (numActions < MAX_ACTIONS) {
+            if (actionsToExecute.isEmpty()) {
+                executeTree(root, map, ant);
+            } else {
+                nextAction(ant, map);
+                numActions++;
+            }
+        }
+        return ant.getScore();
+    }
+
+    public void executeTree(Node root, int[][] mapOrig, ArtificialAnt antOrig){
+        ArtificialAnt ant = new ArtificialAnt(antOrig);
+        int[][] map = new int[width][height];
         for (int i = 0; i < width; i++) {
             for (int j = 0; j < height; j++) {
-                mapCopy[i][j] = map[i][j];
+                map[i][j] = mapOrig[i][j];
             }
         }
 
         Symbol current = root.getSymbol();
         if (current instanceof IfFoodAheadFunction){
-            boolean foodAhead = checkIfFoodAhead(antCopy, mapCopy);
+            boolean foodAhead = checkIfFoodAhead(ant, map);
             if (foodAhead){
                 Node left = root.getChildrenNodes()[0];
-                executeTree(left);
+                executeTree(left, map, ant);
             }
             else{
                 Node right = root.getChildrenNodes()[1];
-                executeTree(right);
+                executeTree(right, map ,ant);
             }
         }
         else if(current instanceof Prog2Function){
             Node first = root.getChildrenNodes()[0];
             Node second = root.getChildrenNodes()[1];
-            executeTree(first);
-            executeTree(second);
+            executeTree(first, map, ant);
+            executeTree(second, map, ant);
         }
         else if(current instanceof Prog3Function){
             Node first = root.getChildrenNodes()[0];
             Node second = root.getChildrenNodes()[1];
             Node third = root.getChildrenNodes()[2];
-            executeTree(first);
-            executeTree(second);
-            executeTree(third);
+            executeTree(first, map, ant);
+            executeTree(second, map, ant);
+            executeTree(third, map, ant);
         }
         else if (current instanceof MoveAction){
-            move(antCopy, mapCopy);
+            move(ant, map);
             actionsToExecute.add("MOV");
-            System.out.println("MOV");
+            //System.out.println("MOV");
         }
         else if (current instanceof TurnLeftAction){
-            turnLeft(antCopy, mapCopy);
+            turnLeft(ant);
             actionsToExecute.add("LEF");
-            System.out.println("LEF");
+            //System.out.println("LEF");
         }
         else if (current instanceof TurnRightAction){
-            turnRight(antCopy, mapCopy);
+            turnRight(ant);
             actionsToExecute.add("RIG");
-            System.out.println("RIG");
+            //System.out.println("RIG");
         }
     }
 
-    public boolean nextAction(){
+    public boolean nextAction(ArtificialAnt ant, int[][] map){
         if (!actionsToExecute.isEmpty()) {
             String action = actionsToExecute.poll();
             switch (action) {
@@ -88,10 +104,10 @@ public class TreeExecutor {
                     move(ant, map);
                     break;
                 case "LEF":
-                    turnLeft(ant, map);
+                    turnLeft(ant);
                     break;
                 case "RIG":
-                    turnRight(ant, map);
+                    turnRight(ant);
                     break;
             }
             return true;
@@ -101,7 +117,7 @@ public class TreeExecutor {
         }
     }
 
-    private void turnRight(ArtificialAnt ant, int[][] map) {
+    private void turnRight(ArtificialAnt ant) {
         Direction antDirection = ant.getDirection();
         switch (antDirection){
             case NORTH:
@@ -120,7 +136,7 @@ public class TreeExecutor {
     }
 
 
-    private void turnLeft(ArtificialAnt ant, int[][] map) {
+    private void turnLeft(ArtificialAnt ant) {
         Direction antDirection = ant.getDirection();
         switch (antDirection){
             case NORTH:
