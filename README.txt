@@ -1,6 +1,10 @@
-- dodati metodu za racunanje broja cvorova
-- naci nacin kako napraviti deep copy Node klase
-- testirati da li metoda za prebrojavanje djece radi i na ne-root nodeovima
-- kazna plagiranja
-- maknut razliku izmedu 0 i -1 na mapi
+- dodati metodu za racunanje broja cvorova + 
+- naci nacin kako napraviti deep copy Node klase +
+- testirati da li metoda za prebrojavanje djece radi i na ne-root nodeovima + 
+- kazna plagiranja 
+- maknut razliku izmedu 0 i -1 na mapi +
 - k turnirsku selekciju trenutno radim tako da uzmem najboljeg od 7, a trebalo bi po vjerojatnostima
+- algoritam napraviti da bude elitisticki + 
+- umjesto id-a u nodeu pridijelit nekakav hash
+- omoguciti da se i root cvorovi mogu mutirati i krizati	
+-renameati Utils u nesto drugo

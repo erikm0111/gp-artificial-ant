@@ -10,16 +10,31 @@ import hr.fer.zemris.optjava.dz12.solution.TreeOperation;
 public class GrowMutation implements IMutation{
     private TreeOperation tb;
     private int maxDepth;
+    private int maxNodes;
 
-    public GrowMutation(TreeOperation tb, int maxDepth){
+    public GrowMutation(TreeOperation tb, int maxDepth, int maxNodes){
         this.tb = tb;
         this.maxDepth = maxDepth;
+        this.maxNodes = maxNodes;
     }
 
     @Override
-    public GANodeSolution mutate(GANodeSolution solution) {
+    public boolean mutate(GANodeSolution solution) {
         Node randomNode = tb.pickRandomNode(solution.getNode());
-        randomNode = tb.growTree(maxDepth);
-        return solution;
+        int id = randomNode.id;
+        Node parent = randomNode.getParentNode();
+        if (parent!=null) {
+            Node[] children = parent.getChildrenNodes();
+            for (int i = 0; i < children.length; i++) {
+                if (id == children[i].id) {
+                    parent.getChildrenNodes()[i] = tb.growForMutation(maxDepth);
+                    break;
+                }
+            }
+        }
+        if (tb.getTreeDepth(solution.getNode()) > maxDepth || tb.countNodesInTree(solution.getNode()) > maxNodes){
+            return false;
+        }
+        return true;
     }
 }

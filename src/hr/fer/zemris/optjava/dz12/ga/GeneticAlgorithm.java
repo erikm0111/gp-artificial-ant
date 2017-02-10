@@ -1,10 +1,13 @@
 package hr.fer.zemris.optjava.dz12.ga;
 
+import hr.fer.zemris.optjava.dz12.ga.crossover.ICrossover;
 import hr.fer.zemris.optjava.dz12.ga.mutation.IMutation;
 import hr.fer.zemris.optjava.dz12.ga.selection.ISelection;
 import hr.fer.zemris.optjava.dz12.solution.*;
 import sun.reflect.generics.tree.Tree;
 
+import javax.rmi.CORBA.Util;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -30,9 +33,11 @@ public class GeneticAlgorithm {
     private Random rand;
     private ISelection selection;
     private IMutation mutation;
+    private ICrossover crossover;
+    private Utils utils;
 
     public GeneticAlgorithm(int[][] map , int width, int height, ArtificialAnt ant, TreeExecutor executor, int maxGen
-            , int populationSize, double minFitness, int maxDepth, ISelection selection, IMutation mutation){
+            , int populationSize, double minFitness, int maxDepth, ISelection selection, IMutation mutation, ICrossover crossover, Utils utils){
         this.populationSize = populationSize;
         this.maxGen = maxGen;
         this.minFitness = minFitness;
@@ -46,11 +51,92 @@ public class GeneticAlgorithm {
         this.rand = new Random();
         this.selection = selection;
         this.mutation = mutation;
+        this.crossover = crossover;
+        this.utils = utils;
     }
 
 
-    public Node optimize() {
+    public Node optimize() throws IOException, ClassNotFoundException {
         createRampedHalfAndHalfInitialPopulation(population, maxDepth);
+        evaluate(population);
+
+        int numGen = 0;
+        while (numGen < maxGen) {
+
+            List<GANodeSolution> nextGeneration = new ArrayList<>();
+            Collections.sort(population);
+            printMaxNodesAndDepth(population);
+            System.out.println("Gen: " + numGen + ", best fitness: " + population.get(0).getFitness() + ", worst fitness: " + population.get(populationSize - 1).getFitness());
+            nextGeneration.add(population.get(0));
+            while (nextGeneration.size() < populationSize) {
+                double p = rand.nextDouble();
+                if (p <= REPRODUCTION_PROB) {
+                    // reproduction
+                    GANodeSolution selected = selection.selectParent(population);
+                    nextGeneration.add(selected);
+                } else if (p <= REPRODUCTION_PROB + MUTATION_PROB) {
+                    // mutation
+                    GANodeSolution selected = selection.selectParent(population);
+                    Node copy = utils.copy(selected.getNode());
+                    GANodeSolution copySolution = new GANodeSolution(copy);
+                    boolean isValid = mutation.mutate(copySolution);
+                    if (isValid) {
+                        nextGeneration.add(copySolution);
+                    }
+                    else{
+                        nextGeneration.add(selected);
+                    }
+                } else {
+                    // crossover
+                    GANodeSolution first = selection.selectParent(population);
+                    GANodeSolution second = selection.selectParent(population);
+                    GANodeSolution firstCopy = new GANodeSolution(utils.copy(first.getNode()));
+                    GANodeSolution secondCopy = new GANodeSolution(utils.copy(second.getNode()));
+                    boolean isValid = crossover.crossover(firstCopy, secondCopy);
+                    if (isValid){
+                        nextGeneration.add(firstCopy);
+                        nextGeneration.add(secondCopy);
+                    }
+                    else {
+                        nextGeneration.add(first);
+                        nextGeneration.add(second);
+                    }
+
+                }
+            }
+            population.clear();
+            population = new ArrayList<>(nextGeneration);
+            evaluate(population);
+            numGen++;
+
+        }
+
+        Collections.sort(population);
+        System.out.println("Best fitness: " + population.get(0).getFitness());
+        System.out.println("Worst fitness: " + population.get(populationSize - 1).getFitness());
+        return population.get(0).getNode();
+    }
+
+    private void printMaxNodesAndDepth(List<GANodeSolution> population) {
+        int maxNodes = 0;
+        int maxDepth = 0;
+        TreeOperation tb = new TreeOperation();
+        for (int i = 0; i < populationSize; i++) {
+            int numNodes = tb.countNodesInTree(population.get(i).getNode());
+            //System.out.print(numNodes + " ");
+            int numDepth = tb.getTreeDepth(population.get(i).getNode());
+            if (numNodes > maxNodes){
+                maxNodes = numNodes;
+            }
+            if (numDepth > maxDepth){
+                maxDepth = numDepth;
+            }
+        }
+        //System.out.println();
+        //System.out.println("max depth: " + maxDepth +", max nodes: " + maxNodes);
+    }
+
+    private void evaluate(List<GANodeSolution> population) {
         for (GANodeSolution sol : population){
             ArtificialAnt antCopy = new ArtificialAnt(ant);
             int[][] mapCopy = new int[width][height];
@@ -62,31 +148,6 @@ public class GeneticAlgorithm {
             int fitness = executor.evaluate(sol.getNode(), mapCopy, antCopy);
             sol.setFitness(fitness);
         }
-
-        List<GANodeSolution> nextGeneration = new ArrayList<>();
-        while (nextGeneration.size() < populationSize){
-            double p = rand.nextDouble();
-            if (p <= REPRODUCTION_PROB){
-                // reproduction
-                GANodeSolution selected = selection.selectParent(population);
-                nextGeneration.add(selected);
-            }
-            else if (p <= REPRODUCTION_PROB + MUTATION_PROB){
-                // mutation
-                GANodeSolution selected = selection.selectParent(population);       // TODO make a copy of parent
-                mutation.mutate(selected);
-                nextGeneration.add(selected);
-            }
-            else{
-                // crossover
-
-            }
-        }
-
-//        Collections.sort(population);
-//        System.out.println(population.get(0).getFitness());
-//        System.out.println(population.get(populationSize - 1).getFitness());
-        return population.get(0).getNode();
     }
 
     public void createRampedHalfAndHalfInitialPopulation(List<GANodeSolution> population, int maxDepth){

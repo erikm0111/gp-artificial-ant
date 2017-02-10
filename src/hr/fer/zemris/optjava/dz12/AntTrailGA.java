@@ -1,11 +1,14 @@
 package hr.fer.zemris.optjava.dz12;
 
 import hr.fer.zemris.optjava.dz12.ga.GeneticAlgorithm;
+import hr.fer.zemris.optjava.dz12.ga.crossover.ICrossover;
+import hr.fer.zemris.optjava.dz12.ga.crossover.SubTreeReplacementCrossover;
+import hr.fer.zemris.optjava.dz12.ga.mutation.GrowMutation;
+import hr.fer.zemris.optjava.dz12.ga.mutation.IMutation;
 import hr.fer.zemris.optjava.dz12.ga.selection.ISelection;
 import hr.fer.zemris.optjava.dz12.ga.selection.KTournamentSelection;
 import hr.fer.zemris.optjava.dz12.gui.ArtificialAntFrame;
 import hr.fer.zemris.optjava.dz12.solution.*;
-import sun.reflect.generics.tree.Tree;
 
 import javax.swing.*;
 import java.io.*;
@@ -28,8 +31,8 @@ public class AntTrailGA {
 //        double minFitness = Double.parseDouble(args[3]);
 //        String pathSolution = args[4];
         String pathMap = "santa-fe-trail.txt";
-        int maxGen = 1000;
-        int populationSize = 1000;
+        int maxGen = 100;
+        int populationSize = 500;
         double minFitness = 70;
 
         File file = new File(pathMap);
@@ -50,9 +53,13 @@ public class AntTrailGA {
         int[][] finalMap = map;
         ArtificialAnt ant = new ArtificialAnt(0, 0, Direction.EAST);
 
+        TreeOperation tb = new TreeOperation();
         TreeExecutor executor = new TreeExecutor(width, height);
         ISelection selection = new KTournamentSelection(7);
-        GeneticAlgorithm ga = new GeneticAlgorithm(map, width, height, ant, executor, maxGen, populationSize, minFitness, MAX_DEPTH, selection);
+        IMutation mutation = new GrowMutation(tb, 20, 200);
+        Utils utils = new Utils();
+        ICrossover crossover = new SubTreeReplacementCrossover(tb, 20, 200, utils);
+        GeneticAlgorithm ga = new GeneticAlgorithm(map, width, height, ant, executor, maxGen, populationSize, minFitness, MAX_DEPTH, selection, mutation, crossover, utils);
         Node best = ga.optimize();
 
 

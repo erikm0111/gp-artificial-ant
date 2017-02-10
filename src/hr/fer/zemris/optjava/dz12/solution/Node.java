@@ -2,17 +2,20 @@ package hr.fer.zemris.optjava.dz12.solution;
 
 import hr.fer.zemris.optjava.dz12.lang.Symbol;
 
+
 /**
  * Created by ematosevic on 06.02.17..
  */
-public class Node {
+public class Node{
+    public int id;
     private int level;
     private Symbol symbol;
     private Node parentNode;
     private Node[] childrenNodes;
     private int numChildren;
 
-    public Node(Node parent, Symbol symbol){
+    public Node(Node parent, Symbol symbol, int id){
+        this.id = id;
         this.symbol = symbol;
         this.numChildren = symbol.numArgs();
         this.childrenNodes = new Node[numChildren];

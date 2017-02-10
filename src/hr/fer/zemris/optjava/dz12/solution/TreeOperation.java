@@ -37,6 +37,15 @@ public class TreeOperation {
         return c;
     }
 
+    public int getTreeDepth(Node root){
+        int deepest = 0;
+        Node[] children = root.getChildrenNodes();
+        for (int i=0; i < children.length; ++i){
+            deepest = Math.max(deepest, getTreeDepth(children[i]));
+        }
+        return deepest + 1;
+    }
+
     public Node pickRandomNode(Node root){
         int numNodes = countNodesInTree(root);
         int nodeId = rand.nextInt(numNodes);
@@ -50,10 +59,10 @@ public class TreeOperation {
         queue.add(root);
         while (!queue.isEmpty()){
             Node node = queue.poll();
-            ++i;
             if(i == nodeId){
                 return node;
             }
+            ++i;
             Node[] children = node.getChildrenNodes();
             for (int j = 0; j < children.length; j++) {
                 queue.add(children[j]);
@@ -62,19 +71,17 @@ public class TreeOperation {
         return null;
     }
 
-    /**
-     * Method that creates tree with inner nodes consisting of terminal and non-terminal symbols.
-     * @param maxDepth maximum depth of tree
-     * @return root node of tree
-     */
-    public Node growTree(int maxDepth){
+    public Node growForMutation(int maxDepth){
+        int id = 0;
         Queue<Node> queue = new LinkedList<>();
-        Node root = new Node(null, randomNonTerminalSymbol());
+        Node root = new Node(null, randomSymbol(), id);
         queue.add(root);
+        ++id;
         for (int i = 0; i < root.getNumChildren(); i++) {
-            Node childNode = new Node(root, (maxDepth - 2 == 0) ? randomTerminalSymbol() : randomSymbol());
+            Node childNode = new Node(root, (maxDepth - 2 == 0) ? randomTerminalSymbol() : randomSymbol(), id);
             root.addChildNode(childNode);
             queue.add(childNode);
+            ++id;
         }
 
         while (true) {
@@ -85,15 +92,60 @@ public class TreeOperation {
             if (current.getLevel() < maxDepth - 2){
                 int numChildren = current.getNumChildren();
                 for (int i = 0; i < numChildren; i++) {
-                    Node childNode = new Node(current, randomSymbol());
+                    Node childNode = new Node(current, randomSymbol(), id);
                     current.addChildNode(childNode);
                     queue.add(childNode);
+                    ++id;
                 }
             }else if (current.getLevel() == maxDepth - 2){
                 int numChildren = current.getNumChildren();
                 for (int i = 0; i < numChildren; i++) {
-                    Node childNode = new Node(current, randomTerminalSymbol());
+                    Node childNode = new Node(current, randomTerminalSymbol(), id);
                     current.addChildNode(childNode);
+                    ++id;
+                }
+            }
+        }
+        return root;
+    }
+
+    /**
+     * Method that creates tree with inner nodes consisting of terminal and non-terminal symbols.
+     * @param maxDepth maximum depth of tree
+     * @return root node of tree
+     */
+    public Node growTree(int maxDepth){
+        int id = 0;
+        Queue<Node> queue = new LinkedList<>();
+        Node root = new Node(null, randomNonTerminalSymbol(), id);
+        queue.add(root);
+        ++id;
+        for (int i = 0; i < root.getNumChildren(); i++) {
+            Node childNode = new Node(root, (maxDepth - 2 == 0) ? randomTerminalSymbol() : randomSymbol(), id);
+            root.addChildNode(childNode);
+            queue.add(childNode);
+            ++id;
+        }
+
+        while (true) {
+            if (queue.isEmpty()){
+                break;
+            }
+            Node current = queue.poll();
+            if (current.getLevel() < maxDepth - 2){
+                int numChildren = current.getNumChildren();
+                for (int i = 0; i < numChildren; i++) {
+                    Node childNode = new Node(current, randomSymbol(), id);
+                    current.addChildNode(childNode);
+                    queue.add(childNode);
+                    ++id;
+                }
+            }else if (current.getLevel() == maxDepth - 2){
+                int numChildren = current.getNumChildren();
+                for (int i = 0; i < numChildren; i++) {
+                    Node childNode = new Node(current, randomTerminalSymbol(), id);
+                    current.addChildNode(childNode);
+                    ++id;
                 }
             }
         }
@@ -106,13 +158,16 @@ public class TreeOperation {
      * @return root node of tree
      */
     public Node fullTree(int maxDepth){
+        int id = 0;
         Queue<Node> queue = new LinkedList<>();
-        Node root = new Node(null, randomNonTerminalSymbol());
+        Node root = new Node(null, randomNonTerminalSymbol(), id);
         queue.add(root);
+        ++id;
         for (int i = 0; i < root.getNumChildren(); i++) {
-            Node childNode = new Node(root, (maxDepth - 2 == 0) ? randomTerminalSymbol() : randomNonTerminalSymbol());
+            Node childNode = new Node(root, (maxDepth - 2 == 0) ? randomTerminalSymbol() : randomNonTerminalSymbol(), id);
             root.addChildNode(childNode);
             queue.add(childNode);
+            ++id;
         }
 
         while (true) {
@@ -123,15 +178,17 @@ public class TreeOperation {
             if (current.getLevel() < maxDepth - 2){
                 int numChildren = current.getNumChildren();
                 for (int i = 0; i < numChildren; i++) {
-                    Node childNode = new Node(current, randomNonTerminalSymbol());
+                    Node childNode = new Node(current, randomNonTerminalSymbol(), id);
                     current.addChildNode(childNode);
                     queue.add(childNode);
+                    ++id;
                 }
             }else if (current.getLevel() == maxDepth - 2){
                 int numChildren = current.getNumChildren();
                 for (int i = 0; i < numChildren; i++) {
-                    Node childNode = new Node(current, randomTerminalSymbol());
+                    Node childNode = new Node(current, randomTerminalSymbol(), id);
                     current.addChildNode(childNode);
+                    ++id;
                 }
             }
         }
