@@ -48,7 +48,7 @@ public class TreeOperation {
 
     public Node pickRandomNode(Node root){
         int numNodes = countNodesInTree(root);
-        int nodeId = rand.nextInt(numNodes);
+        int nodeId = rand.nextInt(numNodes - 1);
         Node node = getNode(root, nodeId);
         return node;
     }
@@ -84,28 +84,8 @@ public class TreeOperation {
             ++id;
         }
 
-        while (true) {
-            if (queue.isEmpty()){
-                break;
-            }
-            Node current = queue.poll();
-            if (current.getLevel() < maxDepth - 2){
-                int numChildren = current.getNumChildren();
-                for (int i = 0; i < numChildren; i++) {
-                    Node childNode = new Node(current, randomSymbol(), id);
-                    current.addChildNode(childNode);
-                    queue.add(childNode);
-                    ++id;
-                }
-            }else if (current.getLevel() == maxDepth - 2){
-                int numChildren = current.getNumChildren();
-                for (int i = 0; i < numChildren; i++) {
-                    Node childNode = new Node(current, randomTerminalSymbol(), id);
-                    current.addChildNode(childNode);
-                    ++id;
-                }
-            }
-        }
+        loopGrowTree(queue, id, maxDepth);
+
         return root;
     }
 
@@ -127,12 +107,18 @@ public class TreeOperation {
             ++id;
         }
 
+        loopGrowTree(queue, id, maxDepth);
+
+        return root;
+    }
+
+    private void loopGrowTree(Queue<Node> queue, int id, int maxDepth) {
         while (true) {
-            if (queue.isEmpty()){
+            if (queue.isEmpty()) {
                 break;
             }
             Node current = queue.poll();
-            if (current.getLevel() < maxDepth - 2){
+            if (current.getLevel() < maxDepth - 2) {
                 int numChildren = current.getNumChildren();
                 for (int i = 0; i < numChildren; i++) {
                     Node childNode = new Node(current, randomSymbol(), id);
@@ -140,7 +126,7 @@ public class TreeOperation {
                     queue.add(childNode);
                     ++id;
                 }
-            }else if (current.getLevel() == maxDepth - 2){
+            } else if (current.getLevel() == maxDepth - 2) {
                 int numChildren = current.getNumChildren();
                 for (int i = 0; i < numChildren; i++) {
                     Node childNode = new Node(current, randomTerminalSymbol(), id);
@@ -149,7 +135,6 @@ public class TreeOperation {
                 }
             }
         }
-        return root;
     }
 
     /**

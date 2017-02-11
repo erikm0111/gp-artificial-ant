@@ -43,7 +43,7 @@ public class ArtificialAntFrame extends JFrame{
         //ex.executeTree(best, finalMap, ant);
         final int[] numActions = {0};
 
-        Timer timer = new Timer(100, new ActionListener() {
+        Timer timer = new Timer(50, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 if (ex.isThereMoreActions()){

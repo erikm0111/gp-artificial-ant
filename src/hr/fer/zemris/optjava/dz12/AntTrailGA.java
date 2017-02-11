@@ -32,7 +32,7 @@ public class AntTrailGA {
 //        String pathSolution = args[4];
         String pathMap = "santa-fe-trail.txt";
         int maxGen = 100;
-        int populationSize = 1000;
+        int populationSize = 500;
         double minFitness = 70;
 
         File file = new File(pathMap);

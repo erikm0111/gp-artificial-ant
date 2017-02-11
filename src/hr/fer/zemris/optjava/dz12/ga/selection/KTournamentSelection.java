@@ -27,6 +27,25 @@ public class KTournamentSelection implements ISelection {
             randomlyChosen.add(population.get(rand.nextInt(population.size())));
         }
         Collections.sort(randomlyChosen);
-        return randomlyChosen.get(0);
+        Collections.reverse(randomlyChosen);
+        int sum = 0;
+        for (int i = 0; i < randomlyChosen.size(); i++) {
+            sum += randomlyChosen.get(i).getFitness();
+        }
+        if (sum > 0) {
+            int domain = rand.nextInt(sum);
+            int p = 0;
+            for (int i = 0; i < randomlyChosen.size(); i++) {
+                p += randomlyChosen.get(i).getFitness();
+                if (domain <= p) {
+                    return randomlyChosen.get(i);
+                }
+            }
+        }
+        else{
+            return randomlyChosen.get(randomlyChosen.size() - 1);
+        }
+        return null;
+        //return randomlyChosen.get(0);
     }
 }

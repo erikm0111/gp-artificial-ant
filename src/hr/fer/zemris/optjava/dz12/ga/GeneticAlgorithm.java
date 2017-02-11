@@ -65,6 +65,7 @@ public class GeneticAlgorithm {
             List<GANodeSolution> nextGeneration = new ArrayList<>();
             Collections.sort(population);
             //printMaxNodesAndDepth(population);
+            printHowManyHaveMaxFitness(population);
             System.out.println("Gen: " + numGen + ", best fitness: " + population.get(0).getFitness() + ", worst fitness: " + population.get(population.size() - 1).getFitness());
 
             createNextGeneration(nextGeneration, population);
@@ -80,6 +81,17 @@ public class GeneticAlgorithm {
         return population.get(0).getNode();
     }
 
+    private void printHowManyHaveMaxFitness(List<GANodeSolution> population) {
+        int maxFitness = population.get(0).getFitness();
+        int i = 0;
+        for (GANodeSolution sol : population){
+            if (sol.getFitness() == maxFitness){
+                ++i;
+            }
+        }
+        System.out.println("Percent with max fitness: " + ((double) i / population.size()));
+    }
+
     private void createNextGeneration(List<GANodeSolution> nextGeneration, List<GANodeSolution> population) throws IOException, ClassNotFoundException {
         nextGeneration.add(population.get(0));
         while (nextGeneration.size() < populationSize) {
@@ -88,29 +100,34 @@ public class GeneticAlgorithm {
                 GANodeSolution selected = selection.selectParent(population);
                 nextGeneration.add(selected);
             } else if (p <= REPRODUCTION_PROB + MUTATION_PROB) {                                // MUTATION
-                GANodeSolution selected = selection.selectParent(population);
-                Node copy = utils.copy(selected.getNode());
-                GANodeSolution copySolution = new GANodeSolution(copy);
-                boolean isValid = mutation.mutate(copySolution);
-                if (isValid) {
-                    nextGeneration.add(copySolution);
-                }
-                else{
-                    nextGeneration.add(selected);
+                boolean isValid = false;
+                while (!isValid){
+                    GANodeSolution selected = selection.selectParent(population);
+                    Node copy = utils.copy(selected.getNode());
+                    GANodeSolution copySolution = new GANodeSolution(copy);
+                    isValid = mutation.mutate(copySolution);
+                    if (isValid) {
+                        nextGeneration.add(copySolution);
+                    }
+                    else{
+    //                    nextGeneration.add(selected);
+                    }
                 }
             } else {                                                                            // CROSSOVER
-                GANodeSolution first = selection.selectParent(population);
-                GANodeSolution second = selection.selectParent(population);
-                GANodeSolution firstCopy = new GANodeSolution(utils.copy(first.getNode()));
-                GANodeSolution secondCopy = new GANodeSolution(utils.copy(second.getNode()));
-                boolean isValid = crossover.crossover(firstCopy, secondCopy);
-                if (isValid){
-                    nextGeneration.add(firstCopy);
-                    nextGeneration.add(secondCopy);
-                }
-                else {
-                    nextGeneration.add(first);
-                    nextGeneration.add(second);
+                boolean isValid = false;
+                while (!isValid) {
+                    GANodeSolution first = selection.selectParent(population);
+                    GANodeSolution second = selection.selectParent(population);
+                    GANodeSolution firstCopy = new GANodeSolution(utils.copy(first.getNode()));
+                    GANodeSolution secondCopy = new GANodeSolution(utils.copy(second.getNode()));
+                    isValid = crossover.crossover(firstCopy, secondCopy);
+                    if (isValid) {
+                        nextGeneration.add(firstCopy);
+                        nextGeneration.add(secondCopy);
+                    } else {
+//                    nextGeneration.add(first);
+//                    nextGeneration.add(second);
+                    }
                 }
 
             }

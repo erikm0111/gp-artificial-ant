@@ -32,9 +32,10 @@ public class GrowMutation implements IMutation{
                 }
             }
         }
-        if (tb.getTreeDepth(solution.getNode()) > maxDepth || tb.countNodesInTree(solution.getNode()) > maxNodes){
-            return false;
-        }
+//        if (tb.getTreeDepth(solution.getNode()) > maxDepth || tb.countNodesInTree(solution.getNode()) > maxNodes){
+//            System.out.println("IPAK");
+//            return false;
+//        }
         return true;
     }
 }
