@@ -18,8 +18,8 @@ import java.util.Random;
  */
 public class GeneticAlgorithm {
     private static final double CROSSOVER_PROB = 0.85;
-    private static final double MUTATION_PROB = 0.14;
-    private static final double REPRODUCTION_PROB = 0.01;
+    private static final double MUTATION_PROB = 0.17;
+    private static final double REPRODUCTION_PROB = 0.03;
     private List<GANodeSolution> population;
     private int populationSize;
     private int maxGen;
@@ -55,7 +55,12 @@ public class GeneticAlgorithm {
         this.utils = utils;
     }
 
-
+    /**
+     * Main optimization method for genetic algorithm
+     * @return best solution after optimization has finished
+     * @throws IOException
+     * @throws ClassNotFoundException
+     */
     public Node optimize() throws IOException, ClassNotFoundException {
         createRampedHalfAndHalfInitialPopulation(population, maxDepth);
         evaluate(population);
@@ -64,7 +69,9 @@ public class GeneticAlgorithm {
         while (numGen < maxGen) {
             List<GANodeSolution> nextGeneration = new ArrayList<>();
             Collections.sort(population);
+
             //printMaxNodesAndDepth(population);
+
             printHowManyHaveMaxFitness(population);
             System.out.println("Gen: " + numGen + ", best fitness: " + population.get(0).getFitness() + ", worst fitness: " + population.get(population.size() - 1).getFitness());
 
@@ -81,6 +88,10 @@ public class GeneticAlgorithm {
         return population.get(0).getNode();
     }
 
+    /**
+     * Helper method which prints stats about max fitness in solutions
+     * @param population
+     */
     private void printHowManyHaveMaxFitness(List<GANodeSolution> population) {
         int maxFitness = population.get(0).getFitness();
         int i = 0;
@@ -92,6 +103,13 @@ public class GeneticAlgorithm {
         System.out.println("Percent with max fitness: " + ((double) i / population.size()));
     }
 
+    /**
+     * Method for populating next generation with solutions
+     * @param nextGeneration empty list that has to be populated
+     * @param population previous population from which next generation is created
+     * @throws IOException
+     * @throws ClassNotFoundException
+     */
     private void createNextGeneration(List<GANodeSolution> nextGeneration, List<GANodeSolution> population) throws IOException, ClassNotFoundException {
         nextGeneration.add(population.get(0));
         while (nextGeneration.size() < populationSize) {
@@ -127,13 +145,17 @@ public class GeneticAlgorithm {
                     } else {
 //                    nextGeneration.add(first);
 //                    nextGeneration.add(second);
-                    }
+                    }   
                 }
 
             }
         }
     }
 
+    /**
+     * Helper method for printing stats about trees
+     * @param population
+     */
     private void printMaxNodesAndDepth(List<GANodeSolution> population) {
         int maxNodes = 0;
         int maxDepth = 0;
@@ -153,6 +175,10 @@ public class GeneticAlgorithm {
         System.out.println("max depth: " + maxDepth +", max nodes: " + maxNodes);
     }
 
+    /**
+     * Evaluation method
+     * @param population population that has to be populated
+     */
     private void evaluate(List<GANodeSolution> population) {
         for (GANodeSolution sol : population){
             ArtificialAnt antCopy = new ArtificialAnt(ant);
@@ -167,6 +193,11 @@ public class GeneticAlgorithm {
         }
     }
 
+    /**
+     * Ramped half and half method of creating initial population
+     * @param population empty list that has to be populated with initial solutions
+     * @param maxDepth max depth of trees in population
+     */
     public void createRampedHalfAndHalfInitialPopulation(List<GANodeSolution> population, int maxDepth){
         TreeOperation tb = new TreeOperation();
         int numOfOneTypePerDepth = (populationSize / (maxDepth - 1)) / 2;

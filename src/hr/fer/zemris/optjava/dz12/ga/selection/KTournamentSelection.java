@@ -43,7 +43,7 @@ public class KTournamentSelection implements ISelection {
             }
         }
         else{
-            return randomlyChosen.get(randomlyChosen.size() - 1);
+            return randomlyChosen.get(rand.nextInt(randomlyChosen.size() - 1));
         }
         return null;
         //return randomlyChosen.get(0);

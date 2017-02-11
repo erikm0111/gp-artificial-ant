@@ -44,10 +44,9 @@ public class SubTreeReplacementCrossover implements ICrossover{
                 }
             }
         }
-//        if (tb.getTreeDepth(first.getNode()) > maxDepth || tb.countNodesInTree(first.getNode()) > maxNodes){
-//            System.out.println("IPAK");
-//            return false;
-//        }
+        if (tb.getTreeDepth(first.getNode()) > maxDepth || tb.countNodesInTree(first.getNode()) > maxNodes){
+            return false;
+        }
 
 
         Node secondParent  = secondRandom.getParentNode();
@@ -60,10 +59,9 @@ public class SubTreeReplacementCrossover implements ICrossover{
                 }
             }
         }
-//        if (tb.getTreeDepth(second.getNode()) > maxDepth || tb.countNodesInTree(second.getNode()) > maxNodes){
-//            System.out.println("IPAK");
-//            return false;
-//        }
+        if (tb.getTreeDepth(second.getNode()) > maxDepth || tb.countNodesInTree(second.getNode()) > maxNodes){
+            return false;
+        }
 
         return true;
     }

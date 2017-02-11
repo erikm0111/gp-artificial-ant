@@ -20,6 +20,7 @@ public class GrowMutation implements IMutation{
 
     @Override
     public boolean mutate(GANodeSolution solution) {
+        int depthOfGrow = 6;
         Node randomNode = tb.pickRandomNode(solution.getNode());
         int id = randomNode.id;
         Node parent = randomNode.getParentNode();
@@ -27,15 +28,14 @@ public class GrowMutation implements IMutation{
             Node[] children = parent.getChildrenNodes();
             for (int i = 0; i < children.length; i++) {
                 if (id == children[i].id) {
-                    parent.getChildrenNodes()[i] = tb.growForMutation(maxDepth);
+                    parent.getChildrenNodes()[i] = tb.growForMutation(depthOfGrow);
                     break;
                 }
             }
         }
-//        if (tb.getTreeDepth(solution.getNode()) > maxDepth || tb.countNodesInTree(solution.getNode()) > maxNodes){
-//            System.out.println("IPAK");
-//            return false;
-//        }
+        if (tb.getTreeDepth(solution.getNode()) > maxDepth || tb.countNodesInTree(solution.getNode()) > maxNodes){
+            return false;
+        }
         return true;
     }
 }

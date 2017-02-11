@@ -9,5 +9,10 @@ import java.util.List;
  * Created by ematosevic on 09.02.17..
  */
 public interface ISelection {
+    /**
+     * Selection method
+     * @param population population from which solutions should be selected
+     * @return solution that has been selected
+     */
     GANodeSolution selectParent(List<GANodeSolution> population);
 }
