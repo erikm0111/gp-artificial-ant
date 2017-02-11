@@ -5,7 +5,7 @@ package hr.fer.zemris.optjava.dz12.solution;
  */
 public class GANodeSolution implements Comparable<GANodeSolution>{
     private Node node;
-    private int fitness;
+    private double fitness;
 
     public GANodeSolution(Node node){
         this.node = node;
@@ -20,11 +20,11 @@ public class GANodeSolution implements Comparable<GANodeSolution>{
         this.node = node;
     }
 
-    public int getFitness() {
+    public double getFitness() {
         return fitness;
     }
 
-    public void setFitness(int fitness) {
+    public void setFitness(double fitness) {
         this.fitness = fitness;
     }
 

@@ -20,6 +20,7 @@ public class GeneticAlgorithm {
     private static final double CROSSOVER_PROB = 0.85;
     private static final double MUTATION_PROB = 0.17;
     private static final double REPRODUCTION_PROB = 0.03;
+    private static final double PLAG = 0.9;
     private List<GANodeSolution> population;
     private int populationSize;
     private int maxGen;
@@ -93,7 +94,7 @@ public class GeneticAlgorithm {
      * @param population
      */
     private void printHowManyHaveMaxFitness(List<GANodeSolution> population) {
-        int maxFitness = population.get(0).getFitness();
+        double maxFitness = population.get(0).getFitness();
         int i = 0;
         for (GANodeSolution sol : population){
             if (sol.getFitness() == maxFitness){
@@ -116,6 +117,8 @@ public class GeneticAlgorithm {
             double p = rand.nextDouble();
             if (p <= REPRODUCTION_PROB) {                                                       // REPRODUCTION
                 GANodeSolution selected = selection.selectParent(population);
+                GANodeSolution selectedCopy = new GANodeSolution(utils.copy(selected.getNode()));
+                selectedCopy.setFitness(selected.getFitness() * PLAG);
                 nextGeneration.add(selected);
             } else if (p <= REPRODUCTION_PROB + MUTATION_PROB) {                                // MUTATION
                 boolean isValid = false;
@@ -125,6 +128,7 @@ public class GeneticAlgorithm {
                     GANodeSolution copySolution = new GANodeSolution(copy);
                     isValid = mutation.mutate(copySolution);
                     if (isValid) {
+                        evaluate(selected, copySolution);
                         nextGeneration.add(copySolution);
                     }
                     else{
@@ -140,15 +144,46 @@ public class GeneticAlgorithm {
                     GANodeSolution secondCopy = new GANodeSolution(utils.copy(second.getNode()));
                     isValid = crossover.crossover(firstCopy, secondCopy);
                     if (isValid) {
+                        evaluate(first, firstCopy);
                         nextGeneration.add(firstCopy);
+
+                        evaluate(second, secondCopy);
                         nextGeneration.add(secondCopy);
                     } else {
 //                    nextGeneration.add(first);
 //                    nextGeneration.add(second);
-                    }   
+                    }
                 }
 
             }
+        }
+        evaluate(nextGeneration);
+    }
+
+    private void evaluate(GANodeSolution origNode, GANodeSolution copyNode) {
+        ArtificialAnt antCopy = new ArtificialAnt(ant);
+        int[][] mapCopy = new int[width][height];
+        for (int i = 0; i < width; i++) {
+            for (int j = 0; j < height; j++) {
+                mapCopy[i][j] = map[i][j];
+            }
+        }
+        int fitnessOrig = executor.evaluate(origNode.getNode(), mapCopy, antCopy);
+
+        antCopy = new ArtificialAnt(ant);
+        mapCopy = new int[width][height];
+        for (int i = 0; i < width; i++) {
+            for (int j = 0; j < height; j++) {
+                mapCopy[i][j] = map[i][j];
+            }
+        }
+        int fitnessCopy = executor.evaluate(copyNode.getNode(), mapCopy, antCopy);
+
+        if (fitnessCopy == fitnessOrig){
+            copyNode.setFitness(PLAG * (double) fitnessCopy);
+        }
+        else{
+            copyNode.setFitness((double)fitnessCopy);
         }
     }
 
