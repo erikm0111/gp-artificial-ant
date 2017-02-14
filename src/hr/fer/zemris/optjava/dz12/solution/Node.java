@@ -40,6 +40,10 @@ public class Node{
         return parentNode;
     }
 
+    public void setParentNode(Node parent){
+        this.parentNode = parent;
+    }
+
     public Node[] getChildrenNodes(){
         return childrenNodes;
     }

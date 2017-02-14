@@ -40,6 +40,7 @@ public class SubTreeReplacementCrossover implements ICrossover{
             for (int i = 0; i < children1.length; i++) {
                 if (firstId == children1[i].id) {
                     firstParent.getChildrenNodes()[i] = secondTemp;
+                    secondTemp.setParentNode(firstParent);
                     break;
                 }
             }
@@ -55,6 +56,7 @@ public class SubTreeReplacementCrossover implements ICrossover{
             for (int i = 0; i < children2.length; i++) {
                 if (secondId == children2[i].id) {
                     secondParent.getChildrenNodes()[i] = firstTemp;
+                    firstTemp.setParentNode(secondParent);
                     break;
                 }
             }

@@ -3,3 +3,6 @@
 - umjesto id-a u nodeu pridijelit nekakav hash
 - omoguciti da se i root cvorovi mogu mutirati i krizati	
 - renameati Utils u nesto drugo
+- u plagiat evaluate metodi uporedivati doublove sa double preciznoscu
+- dodati unosenje argumenata normalno
+- uvesti paralelnu evaluaciju za dodatnu brzinu

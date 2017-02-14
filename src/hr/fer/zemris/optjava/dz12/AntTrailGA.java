@@ -25,15 +25,15 @@ public class AntTrailGA {
         List<String> lines = new ArrayList<>();
         int[][] map = null;
 
-//        String pathMap = args[0];
-//        int maxGen = Integer.parseInt(args[1]);
-//        int populationSize = Integer.parseInt(args[2]);
-//        double minFitness = Double.parseDouble(args[3]);
-//        String pathSolution = args[4];
-        String pathMap = "santa-fe-trail.txt";
-        int maxGen = 100;
-        int populationSize = 500;
-        double minFitness = 70;
+        String pathMap = args[0];
+        int maxGen = Integer.parseInt(args[1]);
+        int populationSize = Integer.parseInt(args[2]);
+        double minFitness = Double.parseDouble(args[3]);
+        String pathSolution = args[4];
+//        String pathMap = "santa-fe-trail.txt";
+//        int maxGen = 100;
+//        int populationSize = 500;
+//        double minFitness = 70;
 
         File file = new File(pathMap);
         BufferedReader reader = new BufferedReader(new FileReader(file));
