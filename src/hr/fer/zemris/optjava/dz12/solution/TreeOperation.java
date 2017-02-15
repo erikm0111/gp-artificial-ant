@@ -180,6 +180,33 @@ public class TreeOperation {
         return root;
     }
 
+    public String treeToText(Node root){
+        String output = "";
+        Queue<Node> queue = new LinkedList<>();
+        queue.add(root);
+        int currentLevelRemaining = 1;
+        int nextLevelRemaining = 0;
+
+        while(!queue.isEmpty()){
+            Node node = queue.poll();
+            currentLevelRemaining--;
+            Node[] children = node.getChildrenNodes();
+            nextLevelRemaining += children.length;
+            for (int i = 0; i < children.length; i++) {
+                queue.add(children[i]);
+            }
+            if (currentLevelRemaining == 0){
+                output += node.toString() + "\n";
+                currentLevelRemaining = nextLevelRemaining;
+                nextLevelRemaining = 0;
+            }
+            else{
+                output += node.toString() + " ";
+            }
+        }
+        return output;
+    }
+
     public Symbol randomNonTerminalSymbol(){
         int bound = nonterminals.length;
         return nonterminals[rand.nextInt(bound)];

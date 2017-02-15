@@ -6,9 +6,6 @@ package hr.fer.zemris.optjava.dz12.lang;
 public abstract class Symbol{
     protected int numArgs;
 
-    public abstract void execute();
-
-
     public int numArgs() {
         return numArgs;
     }

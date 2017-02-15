@@ -10,10 +10,6 @@ public class Prog2Function extends NonTerminalSymbol {
         numArgs = 2;
     }
 
-    @Override
-    public void execute() {
-
-    }
 
     @Override
     public String toString(){

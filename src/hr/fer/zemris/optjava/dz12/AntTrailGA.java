@@ -19,7 +19,10 @@ import java.util.List;
  * Created by ematosevic on 05.02.17..
  */
 public class AntTrailGA {
-    public static final int MAX_DEPTH = 6;
+    public static final int INITIAL_MAX_DEPTH = 6;
+    public static final int MAX_DEPTH_LIMIT = 20;
+    public static final int MAX_NODES_LIMIT = 200;
+    public static final int K_SELECTION = 7;
 
     public static void main(String[] args) throws Exception {
         List<String> lines = new ArrayList<>();
@@ -55,13 +58,14 @@ public class AntTrailGA {
 
         TreeOperation tb = new TreeOperation();
         TreeExecutor executor = new TreeExecutor(width, height);
-        ISelection selection = new KTournamentSelection(7);
-        IMutation mutation = new GrowMutation(tb, 20, 200);
+        ISelection selection = new KTournamentSelection(K_SELECTION);
+        IMutation mutation = new GrowMutation(tb, MAX_DEPTH_LIMIT, MAX_NODES_LIMIT);
         Utils utils = new Utils();
-        ICrossover crossover = new SubTreeReplacementCrossover(tb, 20, 200, utils);
-        GeneticAlgorithm ga = new GeneticAlgorithm(map, width, height, ant, executor, maxGen, populationSize, minFitness, MAX_DEPTH, selection, mutation, crossover, utils);
+        ICrossover crossover = new SubTreeReplacementCrossover(tb, MAX_DEPTH_LIMIT, MAX_NODES_LIMIT, utils);
+        GeneticAlgorithm ga = new GeneticAlgorithm(map, width, height, ant, executor, maxGen, populationSize, minFitness, INITIAL_MAX_DEPTH, selection, mutation, crossover, utils);
         Node best = ga.optimize();
 
+        System.out.println(tb.treeToText(best));
 
         SwingUtilities.invokeLater(new Runnable() {
             @Override

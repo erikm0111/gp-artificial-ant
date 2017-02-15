@@ -11,11 +11,6 @@ public class IfFoodAheadFunction extends NonTerminalSymbol {
     }
 
     @Override
-    public void execute() {
-
-    }
-
-    @Override
     public String toString(){
         return "IF_FOOD_AHEAD";
     }

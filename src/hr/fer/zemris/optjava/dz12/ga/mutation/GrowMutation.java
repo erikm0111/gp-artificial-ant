@@ -31,7 +31,7 @@ public class GrowMutation implements IMutation{
                     Node child = tb.growForMutation(depthOfGrow);
                     parent.getChildrenNodes()[i] = child;
                     child.setParentNode(parent);
-                    break;
+                    //break;
                 }
             }
         }

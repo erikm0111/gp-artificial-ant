@@ -11,11 +11,6 @@ public class TurnLeftAction extends TerminalSymbol {
     }
 
     @Override
-    public void execute() {
-
-    }
-
-    @Override
     public String toString(){
         return "TURN_LEFT";
     }

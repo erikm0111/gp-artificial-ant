@@ -11,11 +11,6 @@ public class MoveAction extends TerminalSymbol {
     }
 
     @Override
-    public void execute() {
-
-    }
-
-    @Override
     public String toString(){
         return "MOVE";
     }

@@ -16,7 +16,7 @@ import java.util.Queue;
  */
 public class TreeExecutor {
     private static final int MAX_ACTIONS = 600;
-    private Queue<String> actionsToExecute = new LinkedList<>();    // TODO
+    private Queue<String> actionsToExecute = new LinkedList<>();
     private int width, height;
 
     public TreeExecutor(int width, int height){

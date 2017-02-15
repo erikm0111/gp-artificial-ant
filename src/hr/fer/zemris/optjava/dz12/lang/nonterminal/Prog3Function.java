@@ -11,11 +11,6 @@ public class Prog3Function extends NonTerminalSymbol {
     }
 
     @Override
-    public void execute() {
-
-    }
-
-    @Override
     public String toString(){
         return "PROG3";
     }

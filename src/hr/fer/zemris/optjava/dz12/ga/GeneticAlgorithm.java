@@ -71,20 +71,22 @@ public class GeneticAlgorithm {
             List<GANodeSolution> nextGeneration = new ArrayList<>();
             Collections.sort(population);
 
-            //printMaxNodesAndDepth(population);
-            //printHowManyHaveMaxFitness(population);
+            printMaxNodesAndDepth(population);
+            printHowManyHaveMaxFitness(population);
 
             System.out.println("Gen: " + numGen + ", best fitness: " + population.get(0).getFitness() + ", worst fitness: " + population.get(population.size() - 1).getFitness());
 
             createNextGeneration(nextGeneration, population);
 
             population = new ArrayList<>(nextGeneration);
-            evaluate(population);
+            //evaluate(population);
             numGen++;
         }
 
         Collections.sort(population);
-        System.out.println("Best fitness: " + population.get(0).getFitness());
+        TreeOperation tb = new TreeOperation();
+        System.out.println("Best tree stats -- DEPTH: " + tb.getTreeDepth(population.get(0).getNode()) + ", NODES: " + tb.countNodesInTree(population.get(0).getNode())
+                + ", FITNESS: " + population.get(0).getFitness());
         System.out.println("Worst fitness: " + population.get(populationSize - 1).getFitness());
         return population.get(0).getNode();
     }
@@ -160,7 +162,7 @@ public class GeneticAlgorithm {
         }
     }
 
-    private void evaluate(GANodeSolution origNode, GANodeSolution copyNode) {
+    private void evaluate(GANodeSolution origNode, GANodeSolution childNode) {
 //        ArtificialAnt antCopy = new ArtificialAnt(ant);
 //        int[][] mapCopy = new int[width][height];
 //        for (int i = 0; i < width; i++) {
@@ -178,13 +180,13 @@ public class GeneticAlgorithm {
                 mapCopy[i][j] = map[i][j];
             }
         }
-        int fitnessCopy = executor.evaluate(copyNode.getNode(), mapCopy, antCopy);
+        int fitnessCopy = executor.evaluate(childNode.getNode(), mapCopy, antCopy);
 
         if (fitnessCopy == fitnessOrig){
-            copyNode.setFitness(PLAG * (double) fitnessCopy);
+            childNode.setFitness(PLAG * (double) fitnessCopy);
         }
         else{
-            copyNode.setFitness((double)fitnessCopy);
+            childNode.setFitness((double)fitnessCopy);
         }
     }
 
