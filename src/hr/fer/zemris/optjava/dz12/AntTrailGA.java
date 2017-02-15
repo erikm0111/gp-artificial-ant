@@ -65,7 +65,10 @@ public class AntTrailGA {
         GeneticAlgorithm ga = new GeneticAlgorithm(map, width, height, ant, executor, maxGen, populationSize, minFitness, INITIAL_MAX_DEPTH, selection, mutation, crossover, utils);
         Node best = ga.optimize();
 
-        System.out.println(tb.treeToText(best));
+        //System.out.println(tb.treeToText(best));
+        PrintWriter pw = new PrintWriter(new FileWriter(pathSolution));
+        pw.println(tb.treeToText(best));
+        pw.close();
 
         SwingUtilities.invokeLater(new Runnable() {
             @Override
@@ -73,6 +76,7 @@ public class AntTrailGA {
                 ArtificialAntFrame frame = new ArtificialAntFrame(best, ant, finalMap, width, height);
             }
         });
+
     }
 
     /**

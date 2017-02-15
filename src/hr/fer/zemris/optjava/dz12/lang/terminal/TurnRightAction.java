@@ -12,7 +12,7 @@ public class TurnRightAction extends TerminalSymbol {
 
     @Override
     public String toString(){
-        return "TURN_RIGHT";
+        return "turn_right";
     }
 
 }
